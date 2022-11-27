@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  postgresql:
+    container_name: postgresT3
+    image: bitnami/postgresql:12.10.0
+    restart: always
+    ports:
+      - '5432'
+    volumes:
+      - 'postgresql_data:/bitnami/postgresql'
+    environment:
+      - 'POSTGRESQL_USER=${POSTGRES_USER}'
+      - 'POSTGRESQL_DATABASE=${POSTGRES_DB}'
+      - 'ALLOW_EMPTY_PASSWORD=${HIDE_EMPTY_PASSWORD}'
+      - 'POSTGRESQL_PASSWORD=${POSTGRES_PASSWORD}'
+  cliente:
+    container_name: cliente
+    build: ./client
+    restart: always
+    ports: 
+      - "9000"
+    environment:
+      FLASK_ENV: development
+    depends_on:
+      - postgresql
+      - servidor
+  servidor:
+    container_name: servidor
+    build: ./backend
+    restart: always
+    ports:
+      - "50051:50051"
+    environment:
+      FLASK_ENV: development
+    tty: true
+    
+    depends_on:
+      - postgresql
+
+volumes:
+  postgresql_data:
+    driver: local
+networks:
+  default:
+    driver: bridge
