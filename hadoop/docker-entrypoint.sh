@@ -14,19 +14,23 @@ if [[ -z $YARNSTART || $YARNSTART -ne 0 ]]; then
         $HADOOP_HOME/sbin/start-yarn.sh
 fi
 
-$HADOOP_HOME/bin/hdfs dfs -mkdir /tmp
-$HADOOP_HOME/bin/hdfs dfs -mkdir /users
-$HADOOP_HOME/bin/hdfs dfs -mkdir /jars
+$HADOOP_HOME/bin/hdfs dfs -mkdir -p /tmp
+$HADOOP_HOME/bin/hdfs dfs -mkdir -p /users
+$HADOOP_HOME/bin/hdfs dfs -mkdir -p /jars
 $HADOOP_HOME/bin/hdfs dfs -chmod 777 /tmp
 $HADOOP_HOME/bin/hdfs dfs -chmod 777 /users
 $HADOOP_HOME/bin/hdfs dfs -chmod 777 /jars
+
 
 $HADOOP_HOME/bin/hdfs dfsadmin -safemode leave
 $HADOOP_HOME/bin/hdfs dfs -mkdir /user
 $HADOOP_HOME/bin/hdfs dfs -mkdir /user/hduser
 $HADOOP_HOME/bin/hdfs dfs -mkdir input	
+$HADOOP_HOME/bin/hdfs dfs -chmod 777 /user
+$HADOOP_HOME/bin/hdfs dfs -chmod 777 /user/hduser
+$HADOOP_HOME/bin/hdfs dfs -chmod 777 input	
 
-$HADOOP_HOME/bin/hdfs dfs -put *.txt input
-
+$HADOOP_HOME/bin/hdfs dfs -put /usr/local/bin/carpeta_1/*.txt input
+$HADOOP_HOME/bin/hdfs dfs -put /usr/local/bin/carpeta_2/*.txt input
 # keep the container running indefinitely
 tail -f $HADOOP_HOME/logs/hadoop-*-namenode-*.log
