@@ -15,7 +15,7 @@ time.sleep(10)
 output=dict()
 
 for i in range(0,10):
-    with open(f'/user/hduser/output/{i}.txt',"rw") as file:
+    with open(f'/user/hduser/output/{i}.txt',"r") as file:
         for line in file:
             word,n = line.split("\t",1)
             t = {count: int(n)}
