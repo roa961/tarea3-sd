@@ -3,8 +3,9 @@
 
 from operator import itemgetter
 import sys
+import json
 
-file = None
+file = {}
 current_word = None
 current_count = 0
 word = None
@@ -13,7 +14,7 @@ count=0
 for line in sys.stdin:
     line = line.strip()
 
-    word, count = line.split('\t', 1)
+    word, doc,num = line.split('\t', 1)
 
     try:
         count = int(count)
@@ -21,12 +22,17 @@ for line in sys.stdin:
         continue
 
     if current_word == word:
-        current_count += count
+        if doc in file:
+            current_count += count
+        else:
+            current_count = count
     else:
         if current_word:
-            print ('%s\t%s' % (current_word, current_count))
+            file[word]= {doc:count}
         current_count = count
         current_word = word
 
 if current_word == word:
-    print ('%s\t%s' % (current_word, current_count))
+    file[word]= {doc:count}
+with open('/usr/local/bin/output.json',"w",encoding="utf-8") as dat:
+    json.dump(file,dat)

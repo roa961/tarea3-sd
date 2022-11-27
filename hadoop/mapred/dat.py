@@ -7,15 +7,14 @@ count1=0
 files = Path('/user/hduser/input').glob('*')
 for file in files:
     count1+=1
-    print(file.name)
-    os.system(f"mapred streaming -files mapper.py,reducer.py -input /user/hduser/input/{file.name}.txt -output /user/hduser/output/{count1}.txt -mapper ./mapper.py -reducer ./reducer.py")
+    os.system(f"mapred streaming -files mapper.py,reducer.py -input /user/hduser/input/*.txt -output /user/hduser/{count1} -mapper ./mapper.py -reducer ./reducer.py")
     
 time.sleep(10)
 
 output=dict()
 
-for i in range(0,10):
-    with open(f'/user/hduser/output/{i}.txt',"r") as file:
+for i in range(1,10):
+    with open(f'/user/hduser/output/{i}',"r") as file:
         for line in file:
             word,n = line.split("\t",1)
             t = {count: int(n)}
