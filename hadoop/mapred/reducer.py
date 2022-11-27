@@ -8,13 +8,14 @@ import json
 file = {}
 current_word = None
 current_count = 0
+current_doc= None
 word = None
 count=0
 
 for line in sys.stdin:
     line = line.strip()
 
-    word, doc,num = line.split('\t', 1)
+    word, doc ,num = line.split('\t',1)
 
     try:
         count = int(count)
@@ -31,8 +32,9 @@ for line in sys.stdin:
             file[word]= {doc:count}
         current_count = count
         current_word = word
+        current_doc = doc
 
 if current_word == word:
-    file[word]= {doc:count}
+    file[current_word]= {current_doc:current_count}
 with open('/usr/local/bin/output.json',"w",encoding="utf-8") as dat:
     json.dump(file,dat)
